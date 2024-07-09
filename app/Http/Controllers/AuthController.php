@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function signup(SignupRequest $request)
     {
-        $data = $request->validated();
+        $data = $request;
 
         try {
             $user = User::create([
