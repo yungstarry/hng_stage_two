@@ -29,7 +29,7 @@ class AuthController extends Controller
         if (!empty($missingFields)) {
             return response()->json([
                 'status' => 'Bad request',
-                'message' => 'Missing required fields: ' . implode(', ', $missingFields),
+                'message' => 'Registration unsuccessful',
                 'statusCode' => 400
             ], 400);
         }
