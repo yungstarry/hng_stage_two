@@ -28,7 +28,7 @@ class SignupRequest extends FormRequest
             "lastName" => "string|required|max:255",
             "email" => "string|required|email|max:255|unique:users,email",
             "password" => "string",
-            "phone" => "string|nullable",
+            
         ];
     }
 
