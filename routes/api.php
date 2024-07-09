@@ -27,8 +27,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 
-Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/auth/register', [AuthController::class, 'signup']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/run-migration',function(){
     Artisan::call('optimize:clear');
