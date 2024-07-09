@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-    public function signup(SignupRequest $request)
+    public function signup(Request $request)
     {
         $data = $request;
 
