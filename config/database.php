@@ -86,7 +86,7 @@ return [
             'port' => env('POSTGRESQL_ADDON_PORT', '5432'),
             'database' => env('POSTGRESQL_ADDON_DB', 'hng_stage_two'),
             'username' => env('POSTGRESQL_ADDON_USER', 'postgres'),
-            'password' => env('POSTGRESQL_ADDON_PASSWORD', 'postgres'),
+            'password' => env('POSTGRESQL_ADDON_PASSWORD', ''),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
