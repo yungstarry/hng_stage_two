@@ -81,12 +81,12 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            // 'url' => env('DB_URL'),
+            'url' => env('DB_URL'),
             'host' => env('RDS_HOST', '127.0.0.1'),
             'port' => env('RDS_PORT', '5432'),
-            'database' => env('RDS_DB_NAME', 'hng_stage_two'),
-            'username' => env('RDS_USERNAME', 'postgres'),
-            'password' => env('RDS_PASSWORD', 'postgres'),
+            'database' => env('DB_NAME', 'hng_stage_two'),
+            'username' => env('DB_USERNAME', 'postgres'),
+            'password' => env('DB_PASSWORD', 'postgres'),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
