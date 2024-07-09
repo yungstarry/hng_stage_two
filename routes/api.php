@@ -23,6 +23,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/organisations/{orgId}', [OrganisationController::class, 'getOrganisation']);
 });
 
+//f
+
 
 
 Route::post('/signup', [AuthController::class, 'signup']);
