@@ -76,8 +76,8 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'Bad request',
                 'message' => 'Registration unsuccessful',
-                'statusCode' => 400,
-                'error' => $e->getMessage()
+                'statusCode' => 400
+
             ], 400);
         }
     }
