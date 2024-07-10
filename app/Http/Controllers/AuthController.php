@@ -15,21 +15,26 @@ class AuthController extends Controller
 {
     public function signup(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required',
-        ]);
+        $data = $request->all();
 
-        if ($validator->fails()) {
+        // Manual validation
+        $requiredFields = ['firstName', 'lastName', 'email', 'password'];
+        $missingFields = [];
+
+        foreach ($requiredFields as $field) {
+            if (empty($data[$field])) {
+                $missingFields[] = $field;
+            }
+        }
+
+        if (!empty($missingFields)) {
             return response()->json([
                 'status' => 'Bad request',
                 'message' => 'Registration unsuccessful',
-                'statusCode' => 400,
-                
+                'statusCode' => 400
             ], 400);
         }
+
 
         try {
             $user = User::create([
