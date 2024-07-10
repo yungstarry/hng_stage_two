@@ -57,6 +57,7 @@ class AuthController extends Controller
             $organisation->save();
 
             $organisation->users()->attach(Auth::id());
+            $user = Auth::user();
             $token = $user->createToken('main')->plainTextToken;
 
             return response()->json([
