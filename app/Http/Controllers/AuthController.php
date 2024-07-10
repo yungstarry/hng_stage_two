@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -49,7 +50,11 @@ class AuthController extends Controller
                 'description' => '',
             ]);
 
-            $organisation->users()->attach($user->userId);
+            // Ensure orgId is generated and assigned
+            $organisation->orgId = (string) Str::uuid();
+            $organisation->save();
+
+            $organisation->users()->attach(Auth::id());
             $token = $user->createToken('main')->plainTextToken;
 
             return response()->json([
