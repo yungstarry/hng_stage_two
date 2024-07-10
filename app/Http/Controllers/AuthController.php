@@ -19,7 +19,7 @@ class AuthController extends Controller
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -27,7 +27,7 @@ class AuthController extends Controller
                 'status' => 'Bad request',
                 'message' => 'Registration unsuccessful',
                 'statusCode' => 400,
-                'errors' => $validator->errors(),
+                
             ], 400);
         }
 
@@ -41,7 +41,7 @@ class AuthController extends Controller
 
             $organisation = Organisation::create([
                 'name' => $request->firstName . "'s Organisation",
-                'description' => '', // Default to empty string if not provided
+                'description' => '',
             ]);
 
             $organisation->users()->attach($user->userId);
