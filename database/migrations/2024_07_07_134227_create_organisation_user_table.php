@@ -14,14 +14,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('organisation_user', function (Blueprint $table) {
-            $table->id();
-            $table->string('userId');
-            $table->string('orgId');
+            $table->uuid('userId');
+            $table->uuid('orgId');
             $table->timestamps();
 
          
             $table->foreign('userId')->references('userId')->on('users')->cascadeOnDelete();
             $table->foreign('orgId')->references('orgId')->on('organisations')->cascadeOnDelete();
+
+            // Composite primary key
+            $table->primary(['userId', 'orgId']);
           });
     }
 
