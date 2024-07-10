@@ -38,20 +38,22 @@ class AuthController extends Controller
 
 
         try {
+            
             $user = User::create([
                 'firstName' => $request->firstName,
                 'lastName' => $request->lastName,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-
+           
+            $orgId = (string) Str::uuid();
             $organisation = Organisation::create([
+                'orgId' => $orgId,
                 'name' => $request->firstName . "'s Organisation",
                 'description' => '',
             ]);
 
-            // Ensure orgId is generated and assigned
-            $organisation->orgId = (string) Str::uuid();
+          
             $organisation->save();
 
             $organisation->users()->attach(Auth::id());
