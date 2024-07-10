@@ -14,6 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('organisation_user', function (Blueprint $table) {
+            $table->id();
+
             $table->uuid('userId');
             $table->uuid('orgId');
             $table->timestamps();
@@ -23,7 +25,7 @@ return new class extends Migration
             $table->foreign('orgId')->references('orgId')->on('organisations')->cascadeOnDelete();
 
             // Composite primary key
-            $table->primary(['userId', 'orgId']);
+            // $table->primary(['userId', 'orgId']);
           });
     }
 
