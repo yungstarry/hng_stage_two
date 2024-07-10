@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -24,6 +25,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'userId',
         'firstName',
         'lastName',
         'email',
@@ -54,5 +56,13 @@ class User extends Authenticatable
         ];
     }
 
+    public static function boot()
+    {
+        parent::boot();
 
+        // Automatically generate UUID for the userId field
+        static::creating(function ($model) {
+            $model->userId = (string) Str::uuid();
+        });
+    }
 }
