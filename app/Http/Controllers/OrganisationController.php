@@ -17,7 +17,7 @@ class OrganisationController extends Controller
             return response()->json([
                 'status' => 'Bad request',
                 'message' => 'Access denied',
-                'statusCode' => 403
+                'statusCode' => 403,
             ], 403);
         }
 
@@ -28,16 +28,13 @@ class OrganisationController extends Controller
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreOrganisationRequest $request)
     {
-        $data =$request->validated();
+        $data = $request->validated();
 
         $organisation = Organisation::create([
-            'name'=> $data['name'],
-            'description'=> $data['description'],
+            'name' => $data['name'],
+            'description' => $data['description'],
         ]);
 
         $organisation->users()->attach(Auth::id());
@@ -45,8 +42,7 @@ class OrganisationController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Organisation created successfully',
-            'data' => $organisation
+            'data' => $organisation,
         ], 201);
     }
-  
 }

@@ -16,6 +16,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Organisation::class, 'organisation_user', 'orgId', 'userId');
     }
     protected $primaryKey = 'userId';
+    public $incrementing = false; 
+    protected $keyType = 'string';
     /**
      * The attributes that are mass assignable.
      *

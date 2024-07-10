@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('organisation_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('userId');
-            $table->unsignedBigInteger('orgId');
+            $table->string('userId');
+            $table->string('orgId');
             $table->timestamps();
 
          

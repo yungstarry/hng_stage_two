@@ -10,6 +10,8 @@ class Organisation extends Model
 
     use HasFactory;
     protected $primaryKey = 'orgId';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'orgId',

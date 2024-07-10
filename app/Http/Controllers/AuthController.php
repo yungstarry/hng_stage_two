@@ -9,51 +9,48 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function signup(Request $request)
     {
-        $data = $request->all();
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
 
-        // Manual validation
-        $requiredFields = ['firstName', 'lastName', 'email', 'password'];
-        $missingFields = [];
-
-        foreach ($requiredFields as $field) {
-            if (empty($data[$field])) {
-                $missingFields[] = $field;
-            }
-        }
-
-        if (!empty($missingFields)) {
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'Bad request',
                 'message' => 'Registration unsuccessful',
-                'statusCode' => 400
+                'statusCode' => 400,
+                'errors' => $validator->errors(),
             ], 400);
         }
 
         try {
             $user = User::create([
-                "firstName" => $data["firstName"],
-                "lastName" => $data["lastName"],
-                "email" => $data["email"],
-                "password" => bcrypt($data["password"]),
+                'firstName' => $request->firstName,
+                'lastName' => $request->lastName,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
             ]);
 
-
             $organisation = Organisation::create([
-                'name' => $data['firstName'] . "'s Organisation",
+                'name' => $request->firstName . "'s Organisation",
+                'description' => '', // Default to empty string if not provided
             ]);
 
             $organisation->users()->attach($user->userId);
-            $token = $user->createToken("main")->plainTextToken;
+            $token = $user->createToken('main')->plainTextToken;
 
             return response()->json([
-                'status' => "success",
-                'message' => "Registration successful",
-                "data" => [
+                'status' => 'success',
+                'message' => 'Registration successful',
+                'data' => [
                     'accessToken' => $token,
                     'user' => $user,
                 ]
@@ -68,45 +65,42 @@ class AuthController extends Controller
         }
     }
 
-    public function login(LoginRequest $request,)
+    public function login(LoginRequest $request)
     {
-        $data = $request->validated();
-        $remember = $data['remember'] ?? false;
-        unset($data['remember']);
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember') ? $request->remember : false;
 
-
-        if (!Auth::attempt($data, $remember)) {
-            return response([
+        if (!Auth::attempt($credentials, $remember)) {
+            return response()->json([
                 'status' => 'Bad request',
                 'message' => 'Authentication failed',
-                'statusCode' => 401
-
+                'statusCode' => 401,
             ], 401);
         }
 
         $user = $request->user();
         $token = $user->createToken('main')->plainTextToken;
 
-        return response([
+        return response()->json([
             'status' => 'success',
             'message' => 'Login successful',
             'data' => [
                 'accessToken' => $token,
                 'user' => $user,
             ]
-        ]);
+        ], 200);
     }
 
     public function logout(Request $request)
     {
         $user = $request->user();
         if ($user && $user->currentAccessToken()) {
-
             $user->currentAccessToken()->delete();
         }
 
         return response()->json([
-            'success' => true,
-        ]);
+            'status' => 'success',
+            'message' => 'Logged out successfully',
+        ], 200);
     }
 }
