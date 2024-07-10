@@ -38,28 +38,29 @@ class AuthController extends Controller
 
 
         try {
-            
             $user = User::create([
                 'firstName' => $request->firstName,
                 'lastName' => $request->lastName,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-           
+
+            // Generate UUID for organisation
             $orgId = (string) Str::uuid();
+
             $organisation = Organisation::create([
                 'orgId' => $orgId,
                 'name' => $request->firstName . "'s Organisation",
                 'description' => '',
             ]);
 
-          
+            // Save the organisation
             $organisation->save();
 
-            $organisation->users()->attach(Auth::id());
+            // Attach user to organisation
+            $organisation->users()->attach($user->userId);
 
-            
-
+            // Create access token for the user
             $token = $user->createToken('main')->plainTextToken;
 
             return response()->json([
@@ -72,7 +73,7 @@ class AuthController extends Controller
             ], 201);
         } catch (\Throwable $e) {
             Log::error('Error creating user: ' . $e->getMessage());
-            return response([
+            return response()->json([
                 'status' => 'Bad request',
                 'message' => 'Registration unsuccessful',
                 'statusCode' => 400,
