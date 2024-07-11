@@ -36,6 +36,18 @@ class AuthController extends Controller
             ], 400);
         }
 
+        // Check for duplicate email
+        $existingUser = User::where('email', $request->email)->first();
+        if ($existingUser) {
+            return response()->json([
+                'status' => 'Bad request',
+                'message' => 'Email already exists',
+                'statusCode' => 422,
+                'errors' => [
+                    'email' => ['The email has already been taken.']
+                ]
+            ], 422);
+        }
 
         try {
             $user = User::create([
@@ -43,6 +55,7 @@ class AuthController extends Controller
                 'lastName' => $request->lastName,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
+                'phone' => $request->phone
             ]);
 
             // Generate UUID for organisation
@@ -77,10 +90,11 @@ class AuthController extends Controller
                 'status' => 'Bad request',
                 'message' => 'Registration unsuccessful',
                 'statusCode' => 400
-
             ], 400);
         }
     }
+
+
 
     public function login(LoginRequest $request)
     {
